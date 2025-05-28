@@ -1,2 +1,10 @@
 *.jar
 *.class
+
+# Maven build artifacts
+/target/
+
+# IntelliJ IDEA or Eclipse files
+*.iml
+.project
+.classpath

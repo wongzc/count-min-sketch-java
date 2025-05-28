@@ -16,11 +16,16 @@ array
 
 
 - to compile:
-    - `javac -cp ".;lib/gson-2.10.1.jar" src/main/java/*.java`
-    - `-cp`: classpath: where to find external class/libraries
-    - and compile all .java in `src/main/java/`
+    - with mvn: `mvn compile`
+    - without mvn:
+        - manual download and add in gson
+        - `javac -cp ".;lib/gson-2.10.1.jar" src/main/java/*.java`
+            - `-cp`: classpath: where to find external class/libraries
+            - and compile all .java in `src/main/java/`
 
 - to run:
-    - `java -cp ".;lib/gson-2.10.1.jar;src/main/java" Main`
-    - `.;lib/gson-2.10.1.jar;src/main/java`: java look into current dir `.`, `lib/...` and `src/main/java`
-    - `Main`: the class with `public static void main(String[] args)`
+    - with mvn: `mvn exec:java -Dexec.mainClass=Main`
+    - without mvn:
+        - `java -cp ".;lib/gson-2.10.1.jar;src/main/java" Main`
+            - `.;lib/gson-2.10.1.jar;src/main/java`: java look into current dir `.`, `lib/...` and `src/main/java`
+            - `Main`: the class with `public static void main(String[] args)`
