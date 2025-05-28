@@ -1,4 +1,3 @@
-import java.util.Random;
 
 
 public class CMSketch<T> {
@@ -10,12 +9,8 @@ public class CMSketch<T> {
         this.depth = (int) Math.ceil(Math.E/ epsilon);
         this.width = (int) Math.ceil(Math.log(1/delta));
         this.table = new int[depth][width];
-        this.hashSeeds = new int[depth];
+        this.hashSeeds = PrimeGenerator.generatePrimes(depth);
 
-        Random rand = new Random();
-        for (int i = 0; i<depth; i++) {
-            hashSeeds[i] = rand.nextInt();
-        }
     }
 
     private int hash(T key, int seed) {
@@ -38,6 +33,19 @@ public class CMSketch<T> {
             min= Math.min(min, table[i][col]);
         }
         return min;
+    }
+
+    // merge in other table ( if the width and dimension is the same)
+    public void merge(CMSketch<T> other) {
+        if ( this.depth != other.depth || this.width != other.width) {
+            throw new IllegalArgumentException("Sketch dimensions need to be same!");
+        }
+
+        for ( int i=0; i<depth; i++) {
+            for (int j=0; j<width; j++) {
+                this.table[i][j]+= other.table[i][j];
+            }
+        }
     }
 
 
