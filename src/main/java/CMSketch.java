@@ -1,4 +1,8 @@
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class CMSketch<T> {
     private int[][] table;
@@ -48,5 +52,24 @@ public class CMSketch<T> {
         }
     }
 
+    public String toJson() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(this);
+    }
+
+    public void saveToFile(String filename) throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter(filename)) {
+            gson.toJson(this, writer);
+        }
+    }
+
+    public static <T> CMSketch<T> loadFromFile(String filename, Class<T> keyType) throws IOException {
+        Gson gson = new Gson();
+        try (FileReader reader = new FileReader(filename)) {
+            // NOTE: Type safety is best-effort here — for non-string keys, more work is needed.
+            return gson.fromJson(reader, CMSketch.class);
+        }
+    }
 
 }
