@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        CMSketch sketch = new CMSketch(5,100);
+        CMSketch sketch = new CMSketch(0.01,0.01);
         sketch.add("apple");
         sketch.add("apple");
         sketch.add("banana");

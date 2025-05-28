@@ -6,9 +6,9 @@ public class CMSketch {
     private int depth, width;
     private int[] hashSeeds;
 
-    public CMSketch(int depth, int width) {
-        this.depth = depth;
-        this.width = width;
+    public CMSketch(double epsilon, double delta) {
+        this.depth = (int) Math.ceil(Math.E/ epsilon);
+        this.width = (int) Math.ceil(Math.log(1/delta));
         this.table = new int[depth][width];
         this.hashSeeds = new int[depth];
 
