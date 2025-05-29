@@ -1,3 +1,4 @@
+package io.github.wongzc.cms;
 // simple prime number generator
 
 public class PrimeGenerator {

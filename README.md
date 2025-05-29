@@ -80,16 +80,17 @@ mvn compile
 
 #### Run
 ```bash
-mvn exec:java -Dexec.mainClass=Main
+mvn exec:java
 ```
 - `exec:java`: use `exec-maven-plugin` to run Java code
-- `-Dexec.mainClass=Main`: set main class to run
+- if didnt specify mainClass, need to add in below:
+  - `-Dexec.mainClass=Main`: set main class to run
 - need to make sure Main is:
     1. in `src/main/java`: 
         - standard & recommended
         - if not in, need to move to there
     2. in default package
-        - else need to specify package, eg: `-Dexec.mainClass=com.example.cms.Main`
+        - else need to specify package, eg: `-Dexec.mainClass=io.github.wongzc.cms.Main`
 
 #### Test
 ```bash

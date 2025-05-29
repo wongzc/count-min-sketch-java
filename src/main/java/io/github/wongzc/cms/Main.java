@@ -1,3 +1,4 @@
+package io.github.wongzc.cms;
 // public class Main {
 //     public static void main(String[] args) {
 //         CMSketch<String> sketch = new CMSketch<>(0.01,0.01);
