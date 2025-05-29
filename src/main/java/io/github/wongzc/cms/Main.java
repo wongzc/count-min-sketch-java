@@ -1,51 +1,97 @@
 package io.github.wongzc.cms;
-// public class Main {
-//     public static void main(String[] args) {
-//         CMSketch<String> sketch = new CMSketch<>(0.01,0.01);
-//         sketch.add("apple");
-//         sketch.add("apple");
-//         sketch.add("banana");
 
-//         System.out.println("Sketch 1:");
-//         System.out.println("apple: " + sketch.estimate("apple"));  
-//         System.out.println("banana: " + sketch.estimate("banana"));  
-//         System.out.println("orange: " + sketch.estimate("orange"));  
-
-//         CMSketch<String> sketch2 = new CMSketch<>(0.01,0.01);
-//         sketch2.add("apple");
-//         sketch2.add("orange");
-
-//         System.out.println("Sketch 2:");
-//         System.out.println("apple: " + sketch2.estimate("apple"));  
-//         System.out.println("banana: " + sketch2.estimate("banana"));  
-//         System.out.println("orange: " + sketch2.estimate("orange"));
-
-//         sketch.merge(sketch2);
-
-//         System.out.println("After merge:");
-//         System.out.println("apple: " + sketch.estimate("apple"));  
-//         System.out.println("banana: " + sketch.estimate("banana"));  
-//         System.out.println("orange: " + sketch.estimate("orange"));
-
-
-//     }
-// }
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        CMSketch<String> sketch = new CMSketch<>(0.01, 0.01);
-        sketch.add("apple");
-        sketch.add("apple");
-        sketch.add("banana");
+        Map<String, CMSketch<String>> cmsMap = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+        String command;
 
-        // Serialize to file
-        sketch.saveToFile("cms.json");
-        System.out.println("Saved to cms.json!");
+        System.out.println("Welcome to Count-Min Sketch CLI!");
+        System.out.println("Commands:");
+        System.out.println("  c <name> <epsilon> <delta>  : Create a new sketch");
+        System.out.println("  a <name> <value>            : Add a value");
+        System.out.println("  e <name> <value>            : Estimate count of value");
+        System.out.println("  r <name>                    : Reset sketch");
+        System.out.println("  m <name1> <name2>           : Merge name2 into name1");
+        System.out.println("  x                           : Exit");
 
-        // Load from file
-        CMSketch<String> loaded = CMSketch.loadFromFile("cms.json", String.class);
-        System.out.println("Loaded from file:");
-        System.out.println("apple: " + loaded.estimate("apple"));  // ~2
-        System.out.println("banana: " + loaded.estimate("banana"));  // ~1
+        while (true) {
+            System.out.print("> ");
+            command = scanner.next();
+
+            if (command.equals("x")) {
+                break;
+            }
+
+            String cms;
+            CMSketch<String> sketch, sketch2;
+            switch (command) {
+                case "c":
+                    cms = scanner.next();
+                    double epsilon = scanner.nextDouble();
+                    double delta = scanner.nextDouble();
+                    cmsMap.put(cms, new CMSketch<>(epsilon, delta));
+                    System.out.println("Created sketch: " + cms);
+                    break;
+
+                case "a":
+                    cms = scanner.next();
+                    String valueToAdd = scanner.next();
+                    sketch = cmsMap.get(cms);
+                    if (sketch == null) {
+                        System.out.println("Sketch not found: " + cms);
+                        break;
+                    }
+                    sketch.add(valueToAdd);
+                    System.out.println("Added " + valueToAdd + " to " + cms);
+                    break;
+
+                case "e":
+                    cms = scanner.next();
+                    String valueToEstimate = scanner.next();
+                    sketch = cmsMap.get(cms);
+                    if (sketch == null) {
+                        System.out.println("Sketch not found: " + cms);
+                        break;
+                    }
+                    int estimate = sketch.estimate(valueToEstimate);
+                    System.out.println("Estimate of '" + valueToEstimate + "' in " + cms + " = " + estimate);
+                    break;
+
+                case "r":
+                    cms = scanner.next();
+                    sketch = cmsMap.get(cms);
+                    if (sketch == null) {
+                        System.out.println("Sketch not found: " + cms);
+                        break;
+                    }
+                    sketch.reset();
+                    System.out.println("Sketch " + cms + " reset.");
+                    break;
+
+                case "m":
+                    String target = scanner.next();
+                    String source = scanner.next();
+                    sketch = cmsMap.get(target);
+                    sketch2 = cmsMap.get(source);
+                    if (sketch == null || sketch2 == null) {
+                        System.out.println("One or both sketches not found.");
+                        break;
+                    }
+                    sketch.merge(sketch2);
+                    System.out.println("Merged " + source + " into " + target);
+                    break;
+
+                default:
+                    System.out.println("Unknown command: " + command);
+            }
+        }
+
+        System.out.println("Goodbye!");
+        scanner.close();
     }
 }

@@ -92,9 +92,7 @@ mvn exec:java
     2. in default package
         - else need to specify package, eg: `-Dexec.mainClass=io.github.wongzc.cms.Main`
 - when run `mvn exec:java`, java will:
-  1. validate `pom.xml` is correct
-  2. compile code in `src/main/java`
-  3. run the main class that defined in `pom.xml` `exec-maven-plugin`
+  1. run the main class that defined in `pom.xml` `exec-maven-plugin`
 
 #### Test
 ```bash

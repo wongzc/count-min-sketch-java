@@ -2,7 +2,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                              http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
-                             <!-- declare file as maven project object model, specify how to validate xml and what version to use-->
+    <!-- declare file as maven project object model, specify how to validate xml and what version to use-->
     <modelVersion>4.0.0</modelVersion> <!-- always use ver 4.0.0-->
 
     <groupId>io.github.wongzc.cms</groupId>
@@ -39,6 +39,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
+
                 <configuration>
                     <mainClass>io.github.wongzc.cms.Main</mainClass> <!-- main class defined here-->
                 </configuration>

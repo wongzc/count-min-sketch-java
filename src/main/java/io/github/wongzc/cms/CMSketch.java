@@ -77,7 +77,7 @@ public class CMSketch<T> {
         }
     }
 
-    public void clear() {
+    public void reset() {
         // table = new int[depth][width]; // garbage collector not cleanning instantly, so both old and new using memory
         for ( int i=0; i<depth; i++) {
             Arrays.fill(table[i],0);  // use fill 0 to avoid reallocating memory, slightly more memory efficient
