@@ -91,6 +91,10 @@ mvn exec:java
         - if not in, need to move to there
     2. in default package
         - else need to specify package, eg: `-Dexec.mainClass=io.github.wongzc.cms.Main`
+- when run `mvn exec:java`, java will:
+  1. validate `pom.xml` is correct
+  2. compile code in `src/main/java`
+  3. run the main class that defined in `pom.xml` `exec-maven-plugin`
 
 #### Test
 ```bash
@@ -118,16 +122,22 @@ java -cp ".;lib/gson-2.10.1.jar;src/main/java" Main
 
 ## About Maven
 
-### Maven standard dir layout
-1. Production code: `src/main/java`
-3. Test code:   	`src/test/java`
-4. Resources:   	`src/main/resources`
-5. Test resources:	`src/test/resources`
+- Maven standard dir layout
+  1. Production code: `src/main/java`
+  3. Test code:   	`src/test/java`
+  4. Resources:   	`src/main/resources`
+  5. Test resources:	`src/test/resources`
 
-- else, need to specify in pom.xml ( but not recommended)
-```xml
-<build>
-  <sourceDirectory>customsrc/</sourceDirectory>
-  <testSourceDirectory>customtest/</testSourceDirectory>
-</build>
-```
+  - else, need to specify in pom.xml ( but not recommended)
+  ```xml
+  <build>
+    <sourceDirectory>customsrc/</sourceDirectory>
+    <testSourceDirectory>customtest/</testSourceDirectory>
+  </build>
+  ```
+- Maven test
+  - Maven auto look for test file with certain pattern ( through `maven-surefire-plugin`):
+    1. `*Test.java`
+    2. `*Tests.java`
+    3. `Test*.java`
+    4. `*TestCase.java`

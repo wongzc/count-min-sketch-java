@@ -2,9 +2,12 @@ package io.github.wongzc.cms;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+
 
 public class CMSketch<T> {
     private int[][] table;
@@ -71,6 +74,13 @@ public class CMSketch<T> {
         try (FileReader reader = new FileReader(filename)) {
             // NOTE: Type safety is best-effort here — for non-string keys, more work is needed.
             return gson.fromJson(reader, CMSketch.class);
+        }
+    }
+
+    public void clear() {
+        // table = new int[depth][width]; // garbage collector not cleanning instantly, so both old and new using memory
+        for ( int i=0; i<depth; i++) {
+            Arrays.fill(table[i],0);  // use fill 0 to avoid reallocating memory, slightly more memory efficient
         }
     }
 

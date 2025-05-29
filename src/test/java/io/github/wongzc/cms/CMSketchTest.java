@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CMSketchTest {
 
-    @Test
+    @Test //annotate with @ Test, so that JUnit will run it
     public void testBasicInsertAndEstimate() {
         CMSketch<String> sketch = new CMSketch<>(0.01, 0.01);
         sketch.add("apple");
