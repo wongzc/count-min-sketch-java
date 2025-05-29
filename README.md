@@ -82,6 +82,19 @@ mvn compile
 ```bash
 mvn exec:java -Dexec.mainClass=Main
 ```
+- `exec:java`: use `exec-maven-plugin` to run Java code
+- `-Dexec.mainClass=Main`: set main class to run
+- need to make sure Main is:
+    1. in `src/main/java`: 
+        - standard & recommended
+        - if not in, need to move to there
+    2. in default package
+        - else need to specify package, eg: `-Dexec.mainClass=com.example.cms.Main`
+
+#### Test
+```bash
+mvn test
+```
 
 ### Without Maven
 
@@ -100,3 +113,20 @@ java -cp ".;lib/gson-2.10.1.jar;src/main/java" Main
 ```
 - `.;lib/gson-2.10.1.jar;src/main/java`: Java looks in current dir `.`, the `lib/` folder, and your Java source directory.
 - `Main`: class containing `public static void main(String[] args)`
+
+
+## About Maven
+
+### Maven standard dir layout
+1. Production code: `src/main/java`
+3. Test code:   	`src/test/java`
+4. Resources:   	`src/main/resources`
+5. Test resources:	`src/test/resources`
+
+- else, need to specify in pom.xml ( but not recommended)
+```xml
+<build>
+  <sourceDirectory>customsrc/</sourceDirectory>
+  <testSourceDirectory>customtest/</testSourceDirectory>
+</build>
+```
