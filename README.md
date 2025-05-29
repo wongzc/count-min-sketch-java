@@ -1,31 +1,102 @@
-count-min-sketch
-- probabilistic data structure
-- use multiple hash function
-- for each input increments counter in 2D array
-- estimate the count of query item as the minimum value from all hashed count
+# Count-Min Sketch in Java
+[![Java Version](https://img.shields.io/badge/Java-23%2B-blue)](https://www.oracle.com/java/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-`ε` (epsilon)
-- error in estimate of frequencies
+This project implements a [Count-Min Sketch](https://en.wikipedia.org/wiki/Count%E2%80%93min_sketch), a probabilistic data structure that provides approximate frequency counts for streamed items using sublinear space.
 
-`δ` (delta)
-- probability that error exceed epsilon
+## Installation
 
-array
-- `w` = e/ε
-- `d` = ln(1/δ)
+Clone this repository and either use Maven or compile manually.
 
+## What is a Count-Min Sketch?
 
-- to compile:
-    - with mvn: `mvn compile`
-    - without mvn:
-        - manual download and add in gson
-        - `javac -cp ".;lib/gson-2.10.1.jar" src/main/java/*.java`
-            - `-cp`: classpath: where to find external class/libraries
-            - and compile all .java in `src/main/java/`
+A Count-Min Sketch is a space-efficient data structure that estimates the frequency of elements in a data stream. It trades off accuracy for memory and computation efficiency.
 
-- to run:
-    - with mvn: `mvn exec:java -Dexec.mainClass=Main`
-    - without mvn:
-        - `java -cp ".;lib/gson-2.10.1.jar;src/main/java" Main`
-            - `.;lib/gson-2.10.1.jar;src/main/java`: java look into current dir `.`, `lib/...` and `src/main/java`
-            - `Main`: the class with `public static void main(String[] args)`
+It works by using multiple hash functions to increment counters in a 2D array upon each insertion, and estimates counts by querying the minimum value from all relevant counters.
+
+## Advantages
+
+- Sublinear space complexity
+- Fast insertion and query time (O(d) where d = number of hash functions)
+- Mergable sketches
+- Easy to serialize and deserialize
+
+## Theory
+
+### Initialization Parameters
+
+- `ε`: error bound — maximum overestimation of frequency
+- `δ`: confidence bound — probability that an error exceeds ε
+
+### Width and Depth
+
+$$
+\text{width} = \lceil \frac{e}{\varepsilon} \rceil,\quad \text{depth} = \lceil \ln \left( \frac{1}{\delta} \right) \rceil
+$$
+
+- `width`: number of columns in the sketch table
+- `depth`: number of hash functions / rows
+
+### Update
+
+When inserting key `x`, compute:
+- `hash_i(x)` for each row `i`
+- Increment counter at `table[i][hash_i(x)]`
+
+### Estimate
+
+To estimate frequency of key `x`, compute:
+- `hash_i(x)` for each row `i`
+- Return: `min(table[i][hash_i(x)])` across all rows
+
+## Example Usage
+
+```java
+CMSketch<String> sketch = new CMSketch<>(0.01, 0.01);
+sketch.add("apple");
+sketch.add("apple");
+sketch.add("banana");
+
+System.out.println(sketch.estimate("apple"));   // ~2
+System.out.println(sketch.estimate("banana"));  // ~1
+System.out.println(sketch.estimate("orange"));  // ~0
+```
+
+### Serialization
+```Java
+sketch.saveToFile("cms.json");                   // Save to file
+CMSketch<String> loaded = CMSketch.loadFromFile("cms.json", String.class);
+System.out.println(loaded.estimate("apple"));    /
+```
+
+## Compile & Run
+
+### With Maven
+
+#### Compile:
+```bash
+mvn compile
+```
+
+#### Run
+```bash
+mvn exec:java -Dexec.mainClass=Main
+```
+
+### Without Maven
+
+#### Manual Setup
+1. Download Gson and place it in the lib/ folder.
+2. Compile:
+```bash
+javac -cp ".;lib/gson-2.10.1.jar" src/main/java/*.java
+```
+- `-cp`: classpath — tells Java where to find external classes/libraries.
+- This command compiles all `.java` files in `src/main/java/`.
+
+#### Run
+``` bash
+java -cp ".;lib/gson-2.10.1.jar;src/main/java" Main
+```
+- `.;lib/gson-2.10.1.jar;src/main/java`: Java looks in current dir `.`, the `lib/` folder, and your Java source directory.
+- `Main`: class containing `public static void main(String[] args)`
